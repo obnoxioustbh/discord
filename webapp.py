@@ -39,7 +39,7 @@ def isAuthorized(code):
 	else:
 		return False
 
-@app.route('/payment')
+@app.route('/paymentSECRETASFUCKBOY')
 def ipn():
 	data = web.data()
 	print(data)
