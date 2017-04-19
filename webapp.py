@@ -77,6 +77,9 @@ def start():
 def discord():
 	return render_template('new_index.html', log="Ready for an attack!")
 
+if __name__ == '__main__':
+    app.run(host='127.0.0.1', port=8080)
+
 """
 	if params['action'] and params['authcode']:
 		authorized = isAuthorized(params['authcode'])
