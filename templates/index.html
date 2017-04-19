@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>discord spammer</title>
+</head>
+
+<body>
+
+<center>
+
+<p>discord spammer, just put in an invite link to a channel and then a message</p>
+
+
+
+	<form method="GET" action="/">
+	  <input type="text" name="invite" placeholder="invite link"><br/>
+	  <input type="text" name="message" placeholder="message"><br/>
+	  <input type="text" name="authcode" placeholder="authorization code (buy)" value="{{ authcode }}"><br/>
+	  <button type="submit" formmethod="GET" formaction="/start">start</button>
+	  <button type="submit" formmethod="GET" formaction="/stop">stop</button>
+	</form>
+
+	<br/><br/>
+
+	<p>{{ log }}</p>
+
+</center>
+
+</body>
+</html>
