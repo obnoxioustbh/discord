@@ -3,6 +3,7 @@ import os
 import signal
 import spammer
 import datetime
+import requests
 
 from multiprocessing import Process
 
@@ -65,6 +66,7 @@ def error_payment(data):
 
 @app.route('/paymentSECRETASFUCKBOY', methods=['POST'])
 def ipn():
+
 	PRODUCT_IDS = {'d998698e': ['86400', collection24h], '7572afa1': ['1209600', collection2w], 'ef5f4af1': ['2592000', collection1m], '6bbd9475': ['0', collectionLifetime]}
 	PAYMENT_ERROR_FILE = 'errors.txt'
 
@@ -73,13 +75,21 @@ def ipn():
 	except:
 		data = request.data
 
-	print(data)
+	headers = {
+		'X-Auth-Email': 'i.am@obnoxious.eu',
+		'X-Auth-Key': '7H-rshyU6x-JbemzWkbFKXPysxSdLWPBrsoDLWXs4JrdZnrB-A',
+	}
+
+
+	
 
 	theJSON = json.loads(data)
 	if theJSON['product_id'] in PRODUCT_IDS:
+		ORDER_ID = theJSON['id']
 		time = PRODUCT_IDS[theJSON['product_id']][0]
-		code = theJSON['delivered']
 		if theJSON['product_id'] != "6bbd9475":
+			code = requests.get('https://selly.gg/api/orders/{0}'.format(ORDER_ID), headers=headers).json()['delivered']
+			print(code)
 			PRODUCT_IDS[theJSON['product_id']][1].insert({'createdAt': datetime.datetime.utcnow(), 'logEvent': 2, 'logMessage': 'Success!', 'code': code})
 		else:
 			PRODUCT_IDS[theJSON['product_id']][1].insert({'code': code})
