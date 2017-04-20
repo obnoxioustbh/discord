@@ -90,13 +90,15 @@ class spammer:
 			return data.decode('utf-8')
 
 async def wss(auth, sem):
-	WSS_URL = 'wss://gateway.discord.gg/?encoding=json&v=6'
-	async with websockets.connect(WSS_URL) as websocket:
-		await websocket.send(json.dumps({"op":2,"d":{"token":auth,"properties":{"os":"Windows","browser":"Chrome","device":"","referrer":"","referring_domain":""},"large_threshold":100,"synced_guilds":[],"presence":{"status":"online","since":0,"afk":False,"game":None},"compress":True}}))
-		
-		while True:
-			data = await websocket.recv()
-			await asyncio.sleep(2)
+	try:
+		WSS_URL = 'wss://gateway.discord.gg/?encoding=json&v=6'
+		async with websockets.connect(WSS_URL) as websocket:
+			await websocket.send(json.dumps({"op":2,"d":{"token":auth,"properties":{"os":"Windows","browser":"Chrome","device":"","referrer":"","referring_domain":""},"large_threshold":100,"synced_guilds":[],"presence":{"status":"online","since":0,"afk":False,"game":None},"compress":True}}))
+			
+			await asyncio.sleep(120)
+			return
+	except:
+		return
 
 async def main(invite, message, channel):
 	try:

@@ -77,6 +77,8 @@ def payment():
 @app.route('/paymentSECRETASFUCKBOY', methods=['POST'])
 def ipn():
 
+	print(request.data)
+
 	PRODUCT_IDS = {'d998698e': ['86400', collection24h], '7572afa1': ['1209600', collection2w], 'ef5f4af1': ['2592000', collection1m], '6bbd9475': ['0', collectionLifetime]}
 	PAYMENT_ERROR_FILE = 'errors.txt'
 
@@ -90,8 +92,11 @@ def ipn():
 		'X-Auth-Key': '7H-rshyU6x-JbemzWkbFKXPysxSdLWPBrsoDLWXs4JrdZnrB-A',
 	}
 
-
-	theJSON = json.loads(data)
+	try:
+		theJSON = json.loads(data)
+	except:
+		print('invalid json...')
+		
 	if theJSON['product_id'] in PRODUCT_IDS:
 		ORDER_ID = theJSON['id']
 		time = PRODUCT_IDS[theJSON['product_id']][0]
