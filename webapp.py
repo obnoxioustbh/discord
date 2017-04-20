@@ -53,11 +53,16 @@ def isAuthorized(code, authorized=False):
 		for acode in collection.find():
 			authCodes.append(acode['code'])
 	
+	print(authCodes)
+
 	for acode in authCodes:
 		if code == acode:
 			authorized = True
 
+	print(authorized)
+
 	return authorized
+#	return authorized
 
 def error_payment(data):
 	data = str(data)
@@ -84,8 +89,6 @@ def ipn():
 		'X-Auth-Key': '7H-rshyU6x-JbemzWkbFKXPysxSdLWPBrsoDLWXs4JrdZnrB-A',
 	}
 
-
-	
 
 	theJSON = json.loads(data)
 	if theJSON['product_id'] in PRODUCT_IDS:
@@ -125,7 +128,11 @@ def start():
 		except:
 			pass
 		authorized = isAuthorized(params['authcode'])
-		start = sendAttack(message=params['message'], invite=params['invite'], authcode=params['authcode'])
+		if authorized:
+			start = sendAttack(message=params['message'], invite=params['invite'], authcode=params['authcode'])
+		else:
+			return render_template('new_index.html', log='Failed to start attack.', authcode=params['authcode'])
+
 		return render_template('new_index.html', log='Started attack successfully on {0} sending {1}'.format(params['invite'], params['message']), authcode=params['authcode'])
 
 	return render_template('new_index.html', log='Failed to start attack.', authcode=params['authcode'])
