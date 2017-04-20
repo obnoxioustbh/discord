@@ -32,8 +32,8 @@ def stopAttack(authcode):
 	os.kill(runningAttacks[authcode], signal.SIGTERM)
 	return {'authcode': authcode, 'stopped': True}
 
-def sendAttack(message=None, invite=None, authcode=None):
-	process = Process(target=spammer.nonMain, args=[message, invite])
+def sendAttack(message=None, invite=None, authcode=None, channel=None):
+	process = Process(target=spammer.nonMain, args=[message, invite, channel])
 	process.start()
 	pid = process.pid
 	runningAttacks[authcode] = pid
@@ -45,6 +45,7 @@ def getParams(request):
 		'authcode': request.args.get('authcode'),
 		'message': request.args.get('message'),
 		'invite': request.args.get('invite'),
+		'channel': request.args.get('channel'),
 	}
 
 def isAuthorized(code, authorized=False):
@@ -127,9 +128,12 @@ def start():
 			stopAttack(params['authcode'])
 		except:
 			pass
+
+		channel = params['channel']
+
 		authorized = isAuthorized(params['authcode'])
 		if authorized:
-			start = sendAttack(message=params['message'], invite=params['invite'], authcode=params['authcode'])
+			start = sendAttack(message=params['message'], invite=params['invite'], authcode=params['authcode'], channel=channel)
 		else:
 			return render_template('new_index.html', log='Failed to start attack.', authcode=params['authcode'])
 
