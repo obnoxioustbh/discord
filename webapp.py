@@ -2,16 +2,30 @@ import json
 import os
 import signal
 import spammer
+import datetime
 
 from multiprocessing import Process
 
 from flask import Flask
 from flask import request
 from flask import render_template
+from bson.codec_options import CodecOptions
+from pymongo.collation import Collation
+from pymongo import MongoClient
 
 app = Flask(__name__)
 
 runningAttacks = {}
+
+client = MongoClient('mongodb://93.190.142.215', 27017)
+db = client.get_database('admin', codec_options=CodecOptions(unicode_decode_error_handler='ignore'))
+print('Signed in: {0}'.format(db.authenticate('admin', '.gpe7h+99W:P}gU}')))
+collection24h = db['discord']
+collection2w = db['discord_2weeks']
+collection1m = db['discord_1month']
+collectionLifetime = db['discord_lifetime']
+
+collections = [collection24h, collection2w, collection1m, collectionLifetime]
 
 def stopAttack(authcode):
 	os.kill(runningAttacks[authcode], signal.SIGTERM)
@@ -32,18 +46,41 @@ def getParams(request):
 		'invite': request.args.get('invite'),
 	}
 
-def isAuthorized(code):
-	authCodes = json.loads(open('auth.json', 'r').read())
-	if code in authCodes['codes']:
-		return True
-	else:
-		return False
+def isAuthorized(code, authorized=False):
+	authCodes = []
+	for collection in collections:
+		for acode in collection.find():
+			authCodes.append(acode['code'])
+	
+	for acode in authCodes:
+		if code == acode:
+			authorized = True
 
-@app.route('/paymentSECRETASFUCKBOY')
+	return authorized
+
+def error_payment(data):
+	data = str(data)
+	with open(PAYMENT_ERROR_FILE) as ERROR_FILE:
+		print('ERROR: {0}'.format(data), file=ERROR_FILE)
+
+@app.route('/paymentSECRETASFUCKBOY', methods=['POST'])
 def ipn():
-	data = web.data()
-	print(data)
-	return data
+	PRODUCT_IDS = {'5.00': ['86400', collection24h], '15.00': ['1209600', collection2w], '30.00': ['2592000', collection1m], '100.00': ['0', collectionLifetime]}
+	PAYMENT_ERROR_FILE = 'errors.txt'
+
+	data = request.data
+	theJSON = json.loads(data)
+	if theJSON['usd_value'] in PRODUCT_IDS:
+		time = PRODUCT_IDS[theJSON['usd_value']][0]
+		code = theJSON['delivered']
+		if theJSON['usd_value'] != "100.00":
+			PRODUCT_IDS[theJSON['usd_value']][1].insert({'createdAt': datetime.datetime.utcnow(), 'logEvent': 2, 'logMessage': 'Success!', 'code': code})
+		else:
+			PRODUCT_IDS[theJSON['usd_value']][1].insert({'code': code})
+		print({'code': code, 'time': time})
+	else:
+		error_payment(theJSON)
+	return str(theJSON)
 
 @app.route('/stop')
 def stop():
