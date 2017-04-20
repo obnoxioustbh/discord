@@ -99,8 +99,11 @@ async def wss(auth, sem):
 			await asyncio.sleep(2)
 
 async def main(invite, message, channel):
-	if '#' in channel:
-		channel = channel.replace('#', '')
+	try:
+		if '#' in channel:
+			channel = channel.replace('#', '')
+	except:
+		channel = ''
 	invID = invite.split('/')[-1]
 	dprint(invID)
 	accounts = open('accounts.txt', 'r').readlines()
