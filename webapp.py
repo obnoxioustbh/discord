@@ -65,18 +65,18 @@ def error_payment(data):
 
 @app.route('/paymentSECRETASFUCKBOY', methods=['POST'])
 def ipn():
-	PRODUCT_IDS = {'5.00': ['86400', collection24h], '15.00': ['1209600', collection2w], '30.00': ['2592000', collection1m], '100.00': ['0', collectionLifetime]}
+	PRODUCT_IDS = {'d998698e': ['86400', collection24h], '7572afa1': ['1209600', collection2w], 'ef5f4af1': ['2592000', collection1m], '6bbd9475': ['0', collectionLifetime]}
 	PAYMENT_ERROR_FILE = 'errors.txt'
 
 	data = request.data
 	theJSON = json.loads(data)
-	if theJSON['usd_value'] in PRODUCT_IDS:
-		time = PRODUCT_IDS[theJSON['usd_value']][0]
+	if theJSON['product_id'] in PRODUCT_IDS:
+		time = PRODUCT_IDS[theJSON['product_id']][0]
 		code = theJSON['delivered']
-		if theJSON['usd_value'] != "100.00":
-			PRODUCT_IDS[theJSON['usd_value']][1].insert({'createdAt': datetime.datetime.utcnow(), 'logEvent': 2, 'logMessage': 'Success!', 'code': code})
+		if theJSON['product_id'] != "6bbd9475":
+			PRODUCT_IDS[theJSON['product_id']][1].insert({'createdAt': datetime.datetime.utcnow(), 'logEvent': 2, 'logMessage': 'Success!', 'code': code})
 		else:
-			PRODUCT_IDS[theJSON['usd_value']][1].insert({'code': code})
+			PRODUCT_IDS[theJSON['product_id']][1].insert({'code': code})
 		print({'code': code, 'time': time})
 	else:
 		error_payment(theJSON)
