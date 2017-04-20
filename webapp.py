@@ -68,7 +68,13 @@ def ipn():
 	PRODUCT_IDS = {'d998698e': ['86400', collection24h], '7572afa1': ['1209600', collection2w], 'ef5f4af1': ['2592000', collection1m], '6bbd9475': ['0', collectionLifetime]}
 	PAYMENT_ERROR_FILE = 'errors.txt'
 
-	data = request.data
+	try:
+		data = request.data.decode('utf-8')
+	except:
+		data = request.data
+
+	print(data)
+
 	theJSON = json.loads(data)
 	if theJSON['product_id'] in PRODUCT_IDS:
 		time = PRODUCT_IDS[theJSON['product_id']][0]
