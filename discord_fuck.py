@@ -12,7 +12,7 @@ sys.argv = ['', 'accounts.txt', 100]
 class bot:
 	def __init__(self, sem):
 		self.sem = sem
-		self.proxy = 'http://gw.proxies.online:8081'
+		self.proxy = 'http://us1.proxies.online:8182'
 		self.googleKey = '6Lef5iQTAAAAAKeIvIY-DeexoO3gj7ryl9rLMEnn'
 		self.captchaKey = '5239dcfa969c0f7e3ecfaac6e1924e95'
 		self.username = 'obnoxious{0}'.format(random.randint(100, 999999))

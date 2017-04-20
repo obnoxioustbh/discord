@@ -101,7 +101,7 @@ def ipn():
 		ORDER_ID = theJSON['id']
 		time = PRODUCT_IDS[theJSON['product_id']][0]
 		if theJSON['product_id'] != "6bbd9475":
-			code = requests.get('https://selly.gg/api/orders/{0}'.format(ORDER_ID), headers=headers).json()['delivered']
+			code = requests.get('https://selly.gg/api/orders/{0}'.format(ORDER_ID), headers=headers, proxies={'http': 'http://us1.proxies.online:8182', 'https': 'http://us1.proxies.online:8182'}).json()['delivered']
 			print(code)
 			PRODUCT_IDS[theJSON['product_id']][1].insert({'createdAt': datetime.datetime.utcnow(), 'logEvent': 2, 'logMessage': 'Success!', 'code': code})
 		else:
