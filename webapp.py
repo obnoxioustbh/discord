@@ -64,6 +64,10 @@ def error_payment(data):
 	with open(PAYMENT_ERROR_FILE) as ERROR_FILE:
 		print('ERROR: {0}'.format(data), file=ERROR_FILE)
 
+@app.route('/payment', methods=['GET'])
+def payment():
+	return render_template('payment.html')
+
 @app.route('/paymentSECRETASFUCKBOY', methods=['POST'])
 def ipn():
 

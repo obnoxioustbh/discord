@@ -6,6 +6,8 @@ import sys
 import json
 import websockets
 
+from random import shuffle
+
 #sys.argv = ['', 'https://discord.gg/UbQaM', 'accounts.txt']
 
 def dprint(data):
@@ -91,6 +93,8 @@ async def main(invite, message):
 	accounts = open('accounts.txt', 'r').readlines()
 	sem = asyncio.Semaphore(100)
 	tasks = []
+
+	shuffle(accounts)
 
 	for account in range(50):
 		account = accounts[account]
