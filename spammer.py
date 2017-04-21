@@ -117,7 +117,7 @@ async def main(invite, message, channel):
 
 	shuffle(accounts)
 
-	for account in range(50):
+	for account in range(100):
 		account = accounts[account]
 		username, password, email, authorization = account.strip().rstrip().split(':')
 		tasks.append(asyncio.ensure_future(spammer(authorization, invID, sem, message, channel).start()))
