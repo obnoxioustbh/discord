@@ -63,6 +63,9 @@ async def semGet(url, token, sem):
 			except aiohttp.errors.ClientOSError:
 				continue
 
+			except:
+				continue
+
 async def verify(token, sem):
 	return await semGet("https://discordapp.com/api/v6/auth/verify", token, sem)
 
