@@ -50,7 +50,7 @@ class spammer:
 				for i in range(15):
 					randomExtra = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
 					message = await self.messageChannel(channelID, session, '{0} {1}'.format(self.message, randomExtra))
-					await asyncio.sleep(2)
+					await asyncio.sleep(4)
 			except Exception as e:
 				self.dprint(e)
 				return
