@@ -5,6 +5,8 @@ import random
 import sys
 import json
 import websockets
+import random
+import string
 
 from random import shuffle
 
@@ -46,7 +48,8 @@ class spammer:
 				
 				self.dprint('[+] Joined: {0}'.format(channelID))
 				for i in range(15):
-					message = await self.messageChannel(channelID, session, self.message)
+					randomExtra = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
+					message = await self.messageChannel(channelID, session, '{0} {1}'.format(self.message, randomExtra))
 					await asyncio.sleep(2)
 			except Exception as e:
 				self.dprint(e)
@@ -63,7 +66,7 @@ class spammer:
 				'accept-encoding':'gzip, deflate, br',
 				'accept-language':'en-US',
 			},
-			data=json.dumps({'content': self.message, 'nonce': "302048676446994432", 'tts': False}))
+			data=json.dumps({'content': message, 'nonce': "302048676446994432", 'tts': False}))
 
 	async def joinServer(self, session):
 		return await self.semPost('https://discordapp.com/api/v6/invite/{0}'.format(self.id), session, proxy=self.proxy,
@@ -131,7 +134,7 @@ def nonMain(message, invite, channel):
 
 if __name__ == "__main__":
 	loop = asyncio.get_event_loop()
-	loop.run_until_complete(main("https://discord.gg/dhpYG", "cocks", "test"))
+	loop.run_until_complete(main("https://discord.gg/NCUzQ", "cocks", "general"))
 
 """
 			except aiohttp.errors.ServerDisconnectedError:
