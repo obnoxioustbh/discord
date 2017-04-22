@@ -18,7 +18,8 @@ def dprint(data):
 
 
 class spammer:
-	def __init__(self, authorization, invID, sem, message, channel):
+	def __init__(self, authorization, invID, sem, message, channel, uid):
+		self.uid = uid
 		self.message = message
 		self.sem = sem
 		self.proxy = 'http://us1.proxies.online:8182'
@@ -37,6 +38,22 @@ class spammer:
 				join = await self.joinServer(session)
 				joinJson = json.loads(join)
 
+				if self.uid:
+					async with session.get('https://discordapp.com/api/v6/users/@me') as resp:
+						theJSON = await resp.json()
+						meUID = theJSON['id']
+
+					async with session.post('https://discordapp.com/api/v6/users/{0}/channels'.format(meUID), data=json.dumps({'recipients': [self.uid]}), headers={'Content-Type': 'application/json'}) as resp:
+						theJSON = await resp.json()
+						print(theJSON)
+						channelToMsg = theJSON['id']
+
+					for i in range(15):
+						randomExtra = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))	
+						await self.messageChannel(channelToMsg, session, '{0} {1}'.format(self.message, randomExtra))
+
+					return
+
 				if self.channel:
 					async with session.get('https://discordapp.com/api/guilds/{0}/channels'.format(joinJson['guild']['id'])) as resp:
 						kek = await resp.json()
@@ -50,7 +67,8 @@ class spammer:
 				for i in range(15):
 					randomExtra = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
 					message = await self.messageChannel(channelID, session, '{0} {1}'.format(self.message, randomExtra))
-					await asyncio.sleep(4)
+					await asyncio.sleep(2)
+
 			except Exception as e:
 				self.dprint(e)
 				return
@@ -103,7 +121,7 @@ async def wss(auth, sem):
 	except:
 		return
 
-async def main(invite, message, channel):
+async def main(invite, message, channel, uid):
 	try:
 		if '#' in channel:
 			channel = channel.replace('#', '')
@@ -117,35 +135,21 @@ async def main(invite, message, channel):
 
 	shuffle(accounts)
 
-	for account in range(100):
+	for account in range(45):
 		account = accounts[account]
 		username, password, email, authorization = account.strip().rstrip().split(':')
-		tasks.append(asyncio.ensure_future(spammer(authorization, invID, sem, message, channel).start()))
+		tasks.append(asyncio.ensure_future(spammer(authorization, invID, sem, message, channel, uid).start()))
 		tasks.append(asyncio.ensure_future(wss(authorization, sem)))
 
 	wait = asyncio.gather(*tasks)
 	await wait
 
 
-def nonMain(message, invite, channel):
+def nonMain(message, invite, channel, uid):
 	dprint([message, invite])
 	loop = asyncio.new_event_loop()
-	loop.run_until_complete(main(invite, message, channel))
+	loop.run_until_complete(main(invite, message, channel, uid))
 
 if __name__ == "__main__":
 	loop = asyncio.get_event_loop()
-	loop.run_until_complete(main("https://discord.gg/NCUzQ", "cocks", "general"))
-
-"""
-			except aiohttp.errors.ServerDisconnectedError:
-				return
-
-			except aiohttp.errors.HttpProxyError:
-				return
-
-			except aiohttp.errors.ClientResponseError:
-				return
-
-			except aiohttp.errors.ClientOSError:
-				return
-"""
+	loop.run_until_complete(main("https://discord.gg/rcYQB", "cocks", "general", "170695192767102978"))
