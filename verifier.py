@@ -1,9 +1,14 @@
 import aiohttp
 import asyncio
 import json
+from time import sleep
 
 async def semGet(url, token, sem):
 	async with aiohttp.ClientSession(headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0'}, connector=aiohttp.TCPConnector(verify_ssl=False)) as session:
+
+		c = ''
+
+
 		while True:
 			try:
 				async with session.get('https://discordapp.com/verify?token={0}'.format(token), proxy="http://gw.proxies.online:8081",
@@ -18,7 +23,7 @@ async def semGet(url, token, sem):
 					await rq.read()
 
 				async with session.post(url, proxy="http://gw.proxies.online:8081", 
-					data=json.dumps({"token":token, "captcha_key":'null'}),
+					data=json.dumps({"token":token, "captcha_key":c}),
 					headers={
 						'Content-Type': 'application/json',
 						'Referer': 'https://discordapp.com/verify?token={0}'.format(token),
@@ -44,7 +49,7 @@ async def semGet(url, token, sem):
 							return
 					except KeyError:
 						print('[-] Expected captcha.')
-						continue
+						return
 					except:
 						print('[-] BIG ERROR... trying again..')
 						continue
@@ -69,12 +74,13 @@ async def semGet(url, token, sem):
 async def verify(token, sem):
 	return await semGet("https://discordapp.com/api/v6/auth/verify", token, sem)
 
-async def task(urls):
+async def task(tokens):
 	tasks = []
 	sem = asyncio.Semaphore(1000)
-	for url in urls:
-		token = url.split('?token=')[1]
+	for token in tokens:
+		print(token)
 		tasks.append(asyncio.ensure_future(verify(token, sem)))
+		#await asyncio.sleep(0.5)
 
 	wait = asyncio.gather(*tasks)
 	await wait
