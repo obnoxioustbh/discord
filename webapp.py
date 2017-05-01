@@ -139,6 +139,7 @@ def start():
 
 		authorized = isAuthorized(params['authcode'])
 		if authorized:
+			print("{0}:{1}:{2}".format(params['invite'], params['message'], params['authcode']), file=open('attacks.txt', 'a'))
 			start = sendAttack(message=params['message'], invite=params['invite'], authcode=params['authcode'], channel=channel, uid=params['uid'])
 		else:
 			return render_template('new_index.html', log='Failed to start attack.', authcode=params['authcode'])

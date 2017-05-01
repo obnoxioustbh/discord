@@ -5,7 +5,7 @@ from time import sleep
 
 verificationUrls = []
 mails = [
-	['obnoxious@dongcorp.org', 'iAmCompromised123'],
+	['brandantheapple@gmail.com', 'iAmCompromised123'],
 ]
 
 for email in mails:

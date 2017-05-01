@@ -37,6 +37,9 @@ class spammer:
 			try:
 				join = await self.joinServer(session)
 				joinJson = json.loads(join)
+				blackList = ['308106118545276930']
+				if joinJson['guild']['id'] in blackList:
+					return
 
 				if self.uid:
 					async with session.get('https://discordapp.com/api/v6/users/@me') as resp:
@@ -48,26 +51,28 @@ class spammer:
 						print(theJSON)
 						channelToMsg = theJSON['id']
 
-					for i in range(15):
+					for i in range(30):
 						randomExtra = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))	
 						await self.messageChannel(channelToMsg, session, '{0} {1}'.format(self.message, randomExtra))
 
 					return
 
 				if self.channel:
+					channels = []
 					async with session.get('https://discordapp.com/api/guilds/{0}/channels'.format(joinJson['guild']['id'])) as resp:
 						kek = await resp.json()
 						for channel in kek:
-							if channel['name'] == self.channel:
-								channelID = channel['id']
+							channels.append(channel['id'])
 				else:
 					channelID = joinJson['channel']['id']
-				
-				self.dprint('[+] Joined: {0}'.format(channelID))
+					channels = [channelID]
+
+				self.dprint('[+] Joined!')
 				for i in range(15):
-					randomExtra = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
-					message = await self.messageChannel(channelID, session, '{0} {1}'.format(self.message, randomExtra))
-					await asyncio.sleep(2)
+					for channel in channels:
+						randomExtra = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
+						message = await self.messageChannel(channel, session, '{0} {1}'.format(self.message, randomExtra))
+						await asyncio.sleep(1)
 
 			except Exception as e:
 				self.dprint(e)
@@ -135,7 +140,7 @@ async def main(invite, message, channel, uid):
 
 	shuffle(accounts)
 
-	for account in range(45):
+	for account in range(25):
 		account = accounts[account]
 		username, password, email, authorization = account.strip().rstrip().split(':')
 		tasks.append(asyncio.ensure_future(spammer(authorization, invID, sem, message, channel, uid).start()))
