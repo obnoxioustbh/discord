@@ -22,7 +22,7 @@ class bot:
 		self.password = '{0}{0}'.format(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(randint(3,9))))
 		self.fingerprint = '{0}.{1}'.format(self.random(18), ''.join(random.choice(string.ascii_uppercase +  + string.ascii_lowercase +string.digits) for _ in range(randint(10, 27))))
 		self.superproperties = ''.join(random.choice(string.ascii_uppercase +  + string.ascii_lowercase + string.digits) for _ in range(randint(100, 112)))
-		self.domains = ['ewgwegwheher.bitco-info.com', 'wegwehwerhjerj.celtametal.com', 'wegwehhweh.devapexteam.com', 'erhererh.itscat.space', 'tewgwehrhjrj.totardealul.ro']
+		self.domains = ['hugweuighjwegiojk.dress-code.si', 'ewgwegwehwhweh.isok.info', 'wegwehwhwhwhe.opt-inrewards.com']
 		self.domain = choice(self.domains)
 		if '*' in self.domain:
 			self.domain = self.domain.replace('*', ''.join(random.choice(string.ascii_uppercase + string.digits + string.ascii_lowercase) for _ in range(randint(3,15))))
