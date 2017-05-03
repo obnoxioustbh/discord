@@ -9,7 +9,7 @@ import random
 import string
 
 from random import shuffle
-
+from random import randint
 #sys.argv = ['', 'https://discord.gg/UbQaM', 'accounts.txt']
 
 def dprint(data):
@@ -22,7 +22,7 @@ class spammer:
 		self.uid = uid
 		self.message = message
 		self.sem = sem
-		self.proxy = 'http://us1.proxies.online:8182'
+		self.proxy = 'http://gw.proxies.online:8081'
 		self.id = invID
 		self.auth = authorization
 		self.channel = channel
@@ -35,33 +35,38 @@ class spammer:
 	async def start(self):
 		async with aiohttp.ClientSession(headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0', 'Authorization': self.auth}, connector=aiohttp.TCPConnector(verify_ssl=False)) as session:
 			try:
+
+				async with session.patch('https://discordapp.com/api/v6/users/@me/settings', headers={'Content-Type': 'application/json'}, data=json.dumps({'status': 'invisible'}), proxy=self.proxy) as resp:
+					theJSON = await resp.json()
+
 				join = await self.joinServer(session)
 				joinJson = json.loads(join)
-				print(joinJson)
+
 				blackList = ['308106118545276930']
 				if joinJson['guild']['id'] in blackList:
 					return
 
 				if self.uid:
-					async with session.get('https://discordapp.com/api/v6/users/@me') as resp:
+					async with session.get('https://discordapp.com/api/v6/users/@me', proxy=self.proxy) as resp:
 						theJSON = await resp.json()
 						meUID = theJSON['id']
 
-					async with session.post('https://discordapp.com/api/v6/users/{0}/channels'.format(meUID), data=json.dumps({'recipients': [self.uid]}), headers={'Content-Type': 'application/json'}) as resp:
+					async with session.post('https://discordapp.com/api/v6/users/{0}/channels'.format(meUID), data=json.dumps({'recipients': [self.uid]}), headers={'Content-Type': 'application/json'}, proxy=self.proxy) as resp:
 						theJSON = await resp.json()
-						print(theJSON)
 						channelToMsg = theJSON['id']
 
-					for i in range(30):
-						randomExtra = ''.join(random.choice(string.ascii_uppercase) for _ in range(1))
-						secondExtra = ''.join(random.choice(string.ascii_uppercase) for _ in range(1))	
-						await self.messageChannel(channelToMsg, session, '{1} {0} {2}'.format(self.message, randomExtra, secondExtra))
-						await asyncio.sleep(3)
+					for i in range(randint(14, 29)):
+						randomExtra = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(1)).swapcase()
+						secondExtra = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(1)).swapcase()
+						await self.messageChannel(channelToMsg, session, '{1} {0} {2}'.format(self.message, randomExtra, secondExtra).swapcase())
+						print('[+] Messages Sent: {0}'.format(i))
+						await asyncio.sleep(randint(1, 7))
+
 					return
 
 				if self.channel:
 					channels = []
-					async with session.get('https://discordapp.com/api/guilds/{0}/channels'.format(joinJson['guild']['id'])) as resp:
+					async with session.get('https://discordapp.com/api/guilds/{0}/channels'.format(joinJson['guild']['id']), proxy=self.proxy) as resp:
 						kek = await resp.json()
 						for channel in kek:
 							channels.append(channel['id'])
@@ -70,13 +75,13 @@ class spammer:
 					channels = [channelID]
 
 				self.dprint('[+] Joined!')
-				for i in range(15):
+				for i in range(randint(4,16)):
 					for channel in channels:
-						randomExtra = ''.join(random.choice(string.ascii_lowercase) for _ in range(1))
-						secondExtra = ''.join(random.choice(string.ascii_lowercase) for _ in range(1))
-						message = await self.messageChannel(channel, session, '{1} {0} {2}'.format(self.message, randomExtra, secondExtra))
-						print(message)
-						await asyncio.sleep(3.5)
+						randomExtra = ''.join(random.choice(string.ascii_lowercase + string.ascii_uppercase) for _ in range(1)).swapcase()
+						secondExtra = ''.join(random.choice(string.ascii_lowercase + string.ascii_uppercase) for _ in range(1)).swapcase()
+						message = await self.messageChannel(channel, session, '{1} {0} {2}'.format(self.message, randomExtra, secondExtra).swapcase())
+						print('[+] Messages Sent: {0}'.format(i))
+						await asyncio.sleep(randint(1, 7))
 
 			except Exception as e:
 				self.dprint(e)
@@ -124,7 +129,7 @@ async def wss(auth, sem):
 		WSS_URL = 'wss://gateway.discord.gg/?encoding=json&v=6'
 		async with websockets.connect(WSS_URL) as websocket:
 			await websocket.send(json.dumps({"op":2,"d":{"token":auth,"properties":{"os":"Windows","browser":"Chrome","device":"","referrer":"","referring_domain":""},"large_threshold":100,"synced_guilds":[],"presence":{"status":"online","since":0,"afk":False,"game":None},"compress":True}}))
-			
+			await websocket.send(json.dumps({"t":"USER_SETTINGS_UPDATE","s":2,"op":0,"d":{"status":"invisible"}}))
 			await asyncio.sleep(120)
 			return
 	except:
@@ -144,12 +149,12 @@ async def main(invite, message, channel, uid):
 
 	shuffle(accounts)
 
-	for account in range(25):
+	for account in range(randint(9, 26)):
 		account = accounts[account]
 		username, password, email, authorization = account.strip().rstrip().split(':')
 		tasks.append(asyncio.ensure_future(spammer(authorization, invID, sem, message, channel, uid).start()))
 		tasks.append(asyncio.ensure_future(wss(authorization, sem)))
-		await asyncio.sleep(1)
+		await asyncio.sleep(randint(1, 7))
 
 	wait = asyncio.gather(*tasks)
 	await wait
@@ -162,4 +167,4 @@ def nonMain(message, invite, channel, uid):
 
 if __name__ == "__main__":
 	loop = asyncio.get_event_loop()
-	loop.run_until_complete(main("https://discord.gg/rcYQB", "cocks", "general", "170695192767102978"))
+	loop.run_until_complete(main("https://discord.gg/SxtDs", "cocks", None, None))

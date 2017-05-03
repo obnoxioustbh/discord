@@ -16,18 +16,17 @@ class bot:
 	def __init__(self, sem):
 		self.sem = sem
 		self.proxy = 'http://gw.proxies.online:8081'
-		self.googleKey = '6Lef5iQTAAAAAKeIvIY-DeexoO3gj7ryl9rLMEnn'
+		self.googleKey = '6Lef5iQTAAAAAKeIvIY-DeexoO3gj7ryl9rLMEnn'	
 		self.captchaKey = '5239dcfa969c0f7e3ecfaac6e1924e95'
-		#self.captchaKey = '5239dcfa969c0f7e3ecfaac6e1924e95'
-		self.username = '{0}{0}'.format(''.join(random.choice(string.ascii_uppercase) for _ in range(randint(3,9))))
-		self.password = 'l{0}p{0}x'.format(''.join(random.choice(string.ascii_uppercase) for _ in range(randint(3, 9))))
-		self.fingerprint = '{0}.{1}'.format(self.random(18), ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(27)))
-		self.superproperties = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(112))
+		self.username = '{0}{0}'.format(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(randint(3,9))))
+		self.password = '{0}{0}'.format(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(randint(3,9))))
+		self.fingerprint = '{0}.{1}'.format(self.random(18), ''.join(random.choice(string.ascii_uppercase +  + string.ascii_lowercase +string.digits) for _ in range(randint(10, 27))))
+		self.superproperties = ''.join(random.choice(string.ascii_uppercase +  + string.ascii_lowercase + string.digits) for _ in range(randint(100, 112)))
 		self.domains = ['ewgwegwheher.bitco-info.com', 'wegwehwerhjerj.celtametal.com', 'wegwehhweh.devapexteam.com', 'erhererh.itscat.space', 'tewgwehrhjrj.totardealul.ro']
 		self.domain = choice(self.domains)
 		if '*' in self.domain:
-			self.domain = self.domain.replace('*', ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(randint(3,15))))
-		self.email = '{0}@{1}'.format(''.join(random.choice(string.ascii_uppercase) for _ in range(randint(10,27))), self.domain)
+			self.domain = self.domain.replace('*', ''.join(random.choice(string.ascii_uppercase + string.digits + string.ascii_lowercase) for _ in range(randint(3,15))))
+		self.email = '{0}@{1}'.format(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(randint(10,27))), self.domain)
 		print(self.email)
 
 	def random(self, n):
@@ -39,12 +38,8 @@ class bot:
 		try:
 			async with aiohttp.ClientSession(headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0'}, connector=aiohttp.TCPConnector(verify_ssl=False)) as session:
 				kek = await self.captcha(session)
-				print('captcha done')
 				index = await self.index(session)
-				print('Sent index')
 				account = await self.register(session)
-				print('sent register')
-				print(account)
 				token = json.loads(account)['token']
 				print('{0}:{1}:{2}:{3}'.format(self.username, self.password, self.email, token), file=open(sys.argv[1], 'a'))
 		except Exception as e:
@@ -61,15 +56,12 @@ class bot:
 			async with session.get('http://2captcha.com/res.php?key={0}&action=get&id={1}'.format(self.captchaKey, CID)) as resp:
 				RES = await resp.read()
 				RES = RES.decode('utf-8').split('|')
-				#print(RES)
+				print('[+] Waiting captcha')
 				if 'CAPCHA_NOT_READY' in RES[0]:
-					await asyncio.sleep(2)
-					print('Waiting captcha')
+					await asyncio.sleep(3)
 					continue
 				else:
-					#print(RES)
 					self.theCaptcha = RES[1]
-					print(self.theCaptcha)
 					return
 			
 
