@@ -56,8 +56,8 @@ class spammer:
 						channelToMsg = theJSON['id']
 
 					for i in range(randint(14, 29)):
-						randomExtra = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(1)).swapcase()
-						secondExtra = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(1)).swapcase()
+						randomExtra = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(randint(1, 10))).swapcase()
+						secondExtra = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(randint(1, 10))).swapcase()
 						await self.messageChannel(channelToMsg, session, '{1} {0} {2}'.format(self.message, randomExtra, secondExtra).swapcase())
 						print('[+] Messages Sent: {0}'.format(i))
 						await asyncio.sleep(randint(1, 7))
@@ -77,8 +77,8 @@ class spammer:
 				self.dprint('[+] Joined!')
 				for i in range(randint(4,16)):
 					for channel in channels:
-						randomExtra = ''.join(random.choice(string.ascii_lowercase + string.ascii_uppercase) for _ in range(1)).swapcase()
-						secondExtra = ''.join(random.choice(string.ascii_lowercase + string.ascii_uppercase) for _ in range(1)).swapcase()
+						randomExtra = ''.join(random.choice(string.ascii_lowercase + string.ascii_uppercase) for _ in range(randint(1, 10))).swapcase()
+						secondExtra = ''.join(random.choice(string.ascii_lowercase + string.ascii_uppercase) for _ in range(randint(1, 10))).swapcase()
 						message = await self.messageChannel(channel, session, '{1} {0} {2}'.format(self.message, randomExtra, secondExtra).swapcase())
 						print('[+] Messages Sent: {0}'.format(i))
 						await asyncio.sleep(randint(1, 7))
