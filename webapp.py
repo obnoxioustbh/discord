@@ -150,6 +150,7 @@ def start():
 
 @app.route('/')
 def discord():
+	return 'Downtime for a few days at most, super busy and I need to work on the whole project, people will be given time for this. Sorry.'
 	return render_template('new_index.html', log="Ready for an attack!")
 
 if __name__ == '__main__':

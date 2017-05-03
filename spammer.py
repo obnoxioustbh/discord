@@ -37,6 +37,7 @@ class spammer:
 			try:
 				join = await self.joinServer(session)
 				joinJson = json.loads(join)
+				print(joinJson)
 				blackList = ['308106118545276930']
 				if joinJson['guild']['id'] in blackList:
 					return
@@ -52,9 +53,10 @@ class spammer:
 						channelToMsg = theJSON['id']
 
 					for i in range(30):
-						randomExtra = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))	
-						await self.messageChannel(channelToMsg, session, '{0} {1}'.format(self.message, randomExtra))
-
+						randomExtra = ''.join(random.choice(string.ascii_uppercase) for _ in range(1))
+						secondExtra = ''.join(random.choice(string.ascii_uppercase) for _ in range(1))	
+						await self.messageChannel(channelToMsg, session, '{1} {0} {2}'.format(self.message, randomExtra, secondExtra))
+						await asyncio.sleep(3)
 					return
 
 				if self.channel:
@@ -70,9 +72,11 @@ class spammer:
 				self.dprint('[+] Joined!')
 				for i in range(15):
 					for channel in channels:
-						randomExtra = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
-						message = await self.messageChannel(channel, session, '{0} {1}'.format(self.message, randomExtra))
-						await asyncio.sleep(1)
+						randomExtra = ''.join(random.choice(string.ascii_lowercase) for _ in range(1))
+						secondExtra = ''.join(random.choice(string.ascii_lowercase) for _ in range(1))
+						message = await self.messageChannel(channel, session, '{1} {0} {2}'.format(self.message, randomExtra, secondExtra))
+						print(message)
+						await asyncio.sleep(3.5)
 
 			except Exception as e:
 				self.dprint(e)
@@ -145,6 +149,7 @@ async def main(invite, message, channel, uid):
 		username, password, email, authorization = account.strip().rstrip().split(':')
 		tasks.append(asyncio.ensure_future(spammer(authorization, invID, sem, message, channel, uid).start()))
 		tasks.append(asyncio.ensure_future(wss(authorization, sem)))
+		await asyncio.sleep(1)
 
 	wait = asyncio.gather(*tasks)
 	await wait

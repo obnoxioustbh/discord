@@ -7,7 +7,7 @@ import json
 import string
 
 from random import choice
-
+from random import randint
 from GmailDotEmailGenerator import GmailDotEmailGenerator
 
 #sys.argv = ['', 'accounts.txt', 120]
@@ -19,17 +19,21 @@ class bot:
 		self.googleKey = '6Lef5iQTAAAAAKeIvIY-DeexoO3gj7ryl9rLMEnn'
 		self.captchaKey = '5239dcfa969c0f7e3ecfaac6e1924e95'
 		#self.captchaKey = '5239dcfa969c0f7e3ecfaac6e1924e95'
-		self.username = '{0}{0}'.format(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6)))
-		self.password = 'a{0}x{0}o'.format(self.username)
-		self.fingerprint = '304508758966054155.maWAOJZ2-TTk8tr_Whj5_-LOSoU'
-		self.superproperties = 'eyJvcyI6IldpbmRvd3MiLCJicm93c2VyIjoiRmlyZWZveCIsImRldmljZSI8IiIsInJlZmYycmVyIjoiIiwicmVmZXJyaW5nX2RvbWFpbiI6IiJ9'
-		self.mails = [
-				['jdeerson752@gmail.com', 'jdeerson7521']
-		]
-
-		self.email = '{0}@gmail.com'.format(choice(GmailDotEmailGenerator(choice(self.mails)[0].split('@')[0]).generate()), self.username)
+		self.username = '{0}{0}'.format(''.join(random.choice(string.ascii_uppercase) for _ in range(randint(3,9))))
+		self.password = 'l{0}p{0}x'.format(''.join(random.choice(string.ascii_uppercase) for _ in range(randint(3, 9))))
+		self.fingerprint = '{0}.{1}'.format(self.random(18), ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(27)))
+		self.superproperties = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(112))
+		self.domains = ['ewgwegwheher.bitco-info.com', 'wegwehwerhjerj.celtametal.com', 'wegwehhweh.devapexteam.com', 'erhererh.itscat.space', 'tewgwehrhjrj.totardealul.ro']
+		self.domain = choice(self.domains)
+		if '*' in self.domain:
+			self.domain = self.domain.replace('*', ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(randint(3,15))))
+		self.email = '{0}@{1}'.format(''.join(random.choice(string.ascii_uppercase) for _ in range(randint(10,27))), self.domain)
 		print(self.email)
 
+	def random(self, n):
+		range_start = 10**(n-1)
+		range_end = (10**n)-1
+		return randint(range_start, range_end)
 
 	async def start(self):
 		try:
