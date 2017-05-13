@@ -20,7 +20,7 @@ class spammer:
 		
 		self.channels = []
 		self.proxy = 'http://gw.proxies.online:8081'
-		self.message = '{random} {message} {random}'
+		self.message = '{message} {random}'
 
 		return
 
