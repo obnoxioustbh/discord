@@ -14,32 +14,36 @@ class stallOnline:
 		return
 
 	async def start(self):
-		async with websockets.connect(self.wssURL) as self.discord:
-			await self.discord.send(json.dumps({"op":2,"d":{"token":self.token,"properties":{"os":"Windows","browser":"Chrome","device":"","referrer":"","referring_domain":""},"large_threshold":100,"synced_guilds":[],"presence":{"status":"invisible","since":0,"afk":False,"game":None},"compress":True}}))
-			
+		for i in range(3):
 			try:
+				async with websockets.connect(self.wssURL) as self.discord:
+					await self.discord.send(json.dumps({"op":2,"d":{"token":self.token,"properties":{"os":"Windows","browser":"Chrome","device":"","referrer":"","referring_domain":""},"large_threshold":100,"synced_guilds":[],"presence":{"status":"invisible","since":0,"afk":False,"game":None},"compress":True}}))
+					
+					try:
 
-				self.buffer = json.loads(await self.discord.recv())
-				if self.buffer['s'] != None:
-					self.count = self.buffer['s']
+						self.buffer = json.loads(await self.discord.recv())
+						if self.buffer['s'] != None:
+							self.count = self.buffer['s']
 
-			except UnicodeDecodeError:
+					except UnicodeDecodeError:
 
-				print('[!] Binary Frame Detected')
+						print('[!] Binary Frame Detected')
 
-			while True:
-				await self.discord.send(json.dumps({"op":1,"d":self.count}))
-				try:
-					self.buffer = json.loads(await self.discord.recv())
-					if self.buffer['s'] != None:
-						self.count = self.buffer['s']
+					while True:
+						await self.discord.send(json.dumps({"op":1,"d":self.count}))
+						try:
+							self.buffer = json.loads(await self.discord.recv())
+							if self.buffer['s'] != None:
+								self.count = self.buffer['s']
 
-				except UnicodeDecodeError:
-					print('[!] Binary Frame Detected')
-				
-				print('[+] Sleeping for 5 seconds')
-				await asyncio.sleep(randint(5, 15))
-				self.count += 1
+						except UnicodeDecodeError:
+							print('[!] Binary Frame Detected')
+						
+						print('[+] Sleeping for 5 seconds')
+						await asyncio.sleep(randint(5, 15))
+						self.count += 1
+			except:
+				continue
 
 async def main(tasks=[]):
 	accounts = open('accounts.txt', 'r').readlines()
