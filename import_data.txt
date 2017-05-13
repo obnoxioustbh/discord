@@ -1,0 +1,5 @@
+db.discord.createIndex( { "createdAt": 1 }, { expireAfterSeconds: 86400 } )
+db.discord_2weeks.createIndex( { "createdAt": 1 }, { expireAfterSeconds: 1209600 } )
+db.discord_1month.createIndex( { "createdAt": 1 }, { expireAfterSeconds: 2592000 } )
+db.discord_lifetime
+lifetime = no index
