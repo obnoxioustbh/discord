@@ -107,10 +107,9 @@ async def main(invite, message, channel, uid, tasks=[]):
 		invite = invite.split('/')[-1]
 
 	accounts = open('accounts.txt', 'r').readlines()
+	shuffle(accounts)
 
-	print(invite, message)
-
-	for account in accounts:
+	for account in accounts[15]:
 		username, password, email, token = account.strip().rstrip().split(':')
 		tasks.append(asyncio.ensure_future(spammer(token=token, message=message, invite=invite, uid=uid).start()))
 	
