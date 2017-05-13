@@ -106,10 +106,12 @@ async def main(invite, message, channel, uid, tasks=[]):
 	if '/' in invite:
 		invite = invite.split('/')[-1]
 
+	print('here')
+
 	accounts = open('accounts.txt', 'r').readlines()
 	shuffle(accounts)
 
-	for account in accounts[15]:
+	for account in accounts[0:15]:
 		try:
 			username, password, email, token = account.strip().rstrip().split(':')
 		except ValueError:
@@ -124,4 +126,4 @@ def nonMain(message, invite, channel, uid):
 
 if __name__ == "__main__":
 	loop = asyncio.new_event_loop()
-	loop.run_until_complete(main('https://discord.gg/cBQ7mWa', 'test', 'all', None))
+	loop.run_until_complete(main('https://discord.gg/h63jw', 'test', 'all', None))
