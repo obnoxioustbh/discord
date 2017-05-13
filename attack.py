@@ -110,7 +110,10 @@ async def main(invite, message, channel, uid, tasks=[]):
 	shuffle(accounts)
 
 	for account in accounts[15]:
-		username, password, email, token = account.strip().rstrip().split(':')
+		try:
+			username, password, email, token = account.strip().rstrip().split(':')
+		except ValueError:
+			continue
 		tasks.append(asyncio.ensure_future(spammer(token=token, message=message, invite=invite, uid=uid).start()))
 	
 	await asyncio.gather(*tasks)
