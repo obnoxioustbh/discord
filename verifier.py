@@ -78,7 +78,7 @@ async def task(tokens):
 	tasks = []
 	sem = asyncio.Semaphore(1000)
 	for token in tokens:
-		print(token)
+		token = token.split('=')[1]
 		tasks.append(asyncio.ensure_future(verify(token, sem)))
 		#await asyncio.sleep(0.5)
 

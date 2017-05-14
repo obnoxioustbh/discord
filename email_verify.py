@@ -5,7 +5,7 @@ from time import sleep
 
 verificationUrls = []
 mails = [
-	['brandantheapple@gmail.com', 'iAmCompromised123'],
+	['allfordiscord@gmail.com', 'apple123lol'],
 ]
 
 for email in mails:
@@ -36,7 +36,7 @@ for email in mails:
 	#mail.uid('STORE', ','.join(iterData) , '+FLAGS', '(\Deleted)')  
 	#mail.expunge() 
 
-	#print('Parsed: {0}'.format(email))
+	print('Parsed: {0}'.format(email))
 
 print('[+] Got {0} verification URLs'.format(len(verificationUrls)))
 

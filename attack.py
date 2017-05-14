@@ -76,10 +76,10 @@ class spammer:
 			return resp
 
 	async def attackAllChannels(self, session):
-		for i in range(15):
+		for i in range(25):
 			for cID in self.channels:
 				self.messageSent = await self.sendMessage(session, cID)
-			await asyncio.sleep(randint(0,1))
+			await asyncio.sleep(0.5)
 
 	async def sendMessage(self, session, cID):
 		async with session.post(
@@ -111,7 +111,7 @@ async def main(invite, message, channel, uid, tasks=[]):
 	accounts = open('accounts.txt', 'r').readlines()
 	shuffle(accounts)
 
-	for account in accounts[0:15]:
+	for account in accounts[0:25]:
 		try:
 			username, password, email, token = account.strip().rstrip().split(':')
 		except ValueError:
