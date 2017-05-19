@@ -10,7 +10,7 @@ from random import choice
 from random import randint
 from GmailDotEmailGenerator import GmailDotEmailGenerator
 
-#sys.argv = ['', 'accounts.txt', 120]
+sys.argv = ['', 'accounts.txt', 100, 'random']
 
 class bot:
 	def __init__(self, sem):
@@ -22,11 +22,11 @@ class bot:
 		self.password = '{0}{0}'.format(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(randint(3,9))))
 		self.fingerprint = '{0}.{1}'.format(self.random(randint(13,18)), ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase +string.digits) for _ in range(randint(10, 27))))
 		self.superproperties = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(randint(100, 112)))
-		self.domains = ['hugweuighjwegiojk.dress-code.si', 'ewgwegwehwhweh.isok.info', 'wegwehwhwhwhe.opt-inrewards.com']
-		self.domain = choice(self.domains)
-		if '*' in self.domain:
-			self.domain = self.domain.replace('*', ''.join(random.choice(string.ascii_uppercase + string.digits + string.ascii_lowercase) for _ in range(randint(3,15))))
-		self.email = '{0}@{1}'.format(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(randint(10,27))), self.domain)
+		try:
+			vrorandom = sys.argv[3]
+			self.email = "{0}@{0}.com".format(''.join(choice(string.ascii_lowercase) for _ in range(randint(3,9))))
+		except:
+			self.email = "agbwvl+{0}-{0}.{0}@{0}.{0}.emlhub.com".format(self.username)
 		print(self.email)
 
 	def random(self, n):
@@ -39,9 +39,13 @@ class bot:
 			async with aiohttp.ClientSession(headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0'}, connector=aiohttp.TCPConnector(verify_ssl=False)) as session:
 				kek = await self.captcha(session)
 				index = await self.index(session)
+				await asyncio.sleep(5)
 				account = await self.register(session)
 				token = json.loads(account)['token']
+				print('[+] Successfully Created Account')
+				print('{0}:{1}:{2}:{3}'.format(self.username, self.password, self.email, token))
 				print('{0}:{1}:{2}:{3}'.format(self.username, self.password, self.email, token), file=open(sys.argv[1], 'a'))
+				print(account)
 		except Exception as e:
 			print('EXCEPTION: {0}'.format(e))
 			return	
@@ -52,11 +56,13 @@ class bot:
 			CID = CID.decode('utf-8').split('|')[1]
 			#print(CID)
 
+		print('[+] Waiting captcha')
+
 		while True:
 			async with session.get('http://2captcha.com/res.php?key={0}&action=get&id={1}'.format(self.captchaKey, CID)) as resp:
 				RES = await resp.read()
 				RES = RES.decode('utf-8').split('|')
-				print('[+] Waiting captcha')
+				
 				if 'CAPCHA_NOT_READY' in RES[0]:
 					await asyncio.sleep(3)
 					continue
@@ -70,9 +76,6 @@ class bot:
 
 	async def index(self, session):
 		return await self.semGet('https://discordapp.com/register', session,
-			headers={
-				'Referer': 'http://google.com/'			
-			},
 			proxy=self.proxy
 		)
 
@@ -80,24 +83,17 @@ class bot:
 		return await self.semPost('https://discordapp.com/api/v6/auth/register', session, 
 			data=json.dumps(
 				{
-					'fingerprint': self.fingerprint,
 					'email': self.email, 
 					'username': self.username, 
 					'password': self.password, 
-					'invite': "null", 
+					'invite': None, 
 					'captcha_key': self.theCaptcha,
 
 				}
 			), 
 			headers={
-				'X-Fingerprint': self.fingerprint,
-				'X-Super-Properties': self.superproperties,
-				'Accept': '*/*',
-				'Accept-Language': 'en-US',
-				'Accept-Encoding': 'gzip, deflate, br',
 				'Content-Type': 'application/json',
 				'Referer': 'https://discordapp.com/register',
-				'DNT': '1',
 				'Connection': 'keep-alive',
 			},
 			proxy=self.proxy)
@@ -128,3 +124,4 @@ async def main():
 if __name__ == "__main__":
 	loop = asyncio.get_event_loop()
 	loop.run_until_complete(main())
+

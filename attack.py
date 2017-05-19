@@ -27,6 +27,7 @@ class spammer:
 	async def start(self):
 		headers = {
 			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.96 Safari/537.36',
+			'Content-Type': 'application/json'
 			'Authorization': self.token,
 		}
 
@@ -41,9 +42,7 @@ class spammer:
 					if self.uid:
 						self.meID = await self.getMeID(session)
 						await self.createPMChannel(session)
-					else:	
-						await self.getAllChannels(session)
-					
+
 					await self.attackAllChannels(session)
 					return
 			except:
@@ -79,14 +78,14 @@ class spammer:
 		for i in range(25):
 			for cID in self.channels:
 				self.messageSent = await self.sendMessage(session, cID)
-			await asyncio.sleep(0.5)
+			await asyncio.sleep(choice([0.1, 0.2, 0.3]))
 
 	async def sendMessage(self, session, cID):
 		async with session.post(
 			'https://discordapp.com/api/v6/channels/{0}/messages'.format(cID), 
 				proxy=self.proxy, 
 				headers={'Content-Type': 'application/json'},
-				data=json.dumps({'content': self.message.format(random=self.generateSomeRandomCharacters(), message=self.messageContent), 'nonce': randint(1000000000000000000, 9000000000000000000)}),
+				data=json.dumps({'content': self.message.format(random=self.generateSomeRandomCharacters(), message=self.messageContent)}),
 			) as request:
 			resp = await request.json()
 			return resp
@@ -117,6 +116,7 @@ async def main(invite, message, channel, uid, tasks=[]):
 		except ValueError:
 			continue
 		tasks.append(asyncio.ensure_future(spammer(token=token, message=message, invite=invite, uid=uid).start()))
+		await asyncio.sleep(choice([0.1, 0.2, 0.3]))
 	
 	await asyncio.gather(*tasks)
 
@@ -126,4 +126,4 @@ def nonMain(message, invite, channel, uid):
 
 if __name__ == "__main__":
 	loop = asyncio.new_event_loop()
-	loop.run_until_complete(main('https://discord.gg/h63jw', 'test', 'all', None))
+	loop.run_until_complete(main('https://discord.gg/pcWvTR', 'test', 'all', None))
