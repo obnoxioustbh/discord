@@ -47,6 +47,10 @@ class bot:
 				print('{0}:{1}:{2}:{3}'.format(self.username, self.password, self.email, token), file=open(sys.argv[1], 'a'))
 				print(account)
 		except Exception as e:
+			try:
+				print(account)
+			except:
+				return
 			print('EXCEPTION: {0}'.format(e))
 			return	
 
