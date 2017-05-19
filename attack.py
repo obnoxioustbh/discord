@@ -9,6 +9,7 @@ from aiohttp import ClientSession
 from aiohttp import TCPConnector
 from random import shuffle
 from random import randint
+from random import choice
 
 class spammer:
 	def __init__(self, token=None, message=None, invite=None, channel=None, uid=None):
@@ -27,7 +28,7 @@ class spammer:
 	async def start(self):
 		headers = {
 			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.96 Safari/537.36',
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
 			'Authorization': self.token,
 		}
 
@@ -42,7 +43,9 @@ class spammer:
 					if self.uid:
 						self.meID = await self.getMeID(session)
 						await self.createPMChannel(session)
+					
 
+					await self.getAllChannels(session)
 					await self.attackAllChannels(session)
 					return
 			except:
@@ -105,12 +108,10 @@ async def main(invite, message, channel, uid, tasks=[]):
 	if '/' in invite:
 		invite = invite.split('/')[-1]
 
-	print('here')
-
 	accounts = open('accounts.txt', 'r').readlines()
 	shuffle(accounts)
 
-	for account in accounts[0:25]:
+	for account in accounts[0:randint(20, 30)]:
 		try:
 			username, password, email, token = account.strip().rstrip().split(':')
 		except ValueError:
