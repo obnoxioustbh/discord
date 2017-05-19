@@ -26,7 +26,7 @@ class bot:
 			vrorandom = sys.argv[3]
 			self.email = "{0}@{0}.com".format(''.join(choice(string.ascii_lowercase) for _ in range(randint(3,9))))
 		except:
-			self.email = "{0}@discordismydadddddddddddddddddddddddddddddddy.tkm".format(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(randint(1,9))))
+			self.email = "{0}@discordismydadddddddddddddddddddddddddddddddy.tk".format(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(randint(1,9))))
 		print(self.email)
 
 	def random(self, n):
