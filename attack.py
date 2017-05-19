@@ -111,7 +111,7 @@ async def main(invite, message, channel, uid, tasks=[]):
 	accounts = open('accounts.txt', 'r').readlines()
 	shuffle(accounts)
 
-	for account in accounts[0:randint(20, 30)]:
+	for account in accounts[0:24]:
 		try:
 			username, password, email, token = account.strip().rstrip().split(':')
 		except ValueError:
