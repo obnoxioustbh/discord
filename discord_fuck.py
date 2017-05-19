@@ -10,7 +10,7 @@ from random import choice
 from random import randint
 from GmailDotEmailGenerator import GmailDotEmailGenerator
 
-sys.argv = ['', 'accounts.txt', 100, 'random']
+#sys.argv = ['', 'accounts.txt', 100, 'random']
 
 class bot:
 	def __init__(self, sem):
@@ -18,15 +18,15 @@ class bot:
 		self.proxy = 'http://gw.proxies.online:8081'
 		self.googleKey = '6Lef5iQTAAAAAKeIvIY-DeexoO3gj7ryl9rLMEnn'	
 		self.captchaKey = '5239dcfa969c0f7e3ecfaac6e1924e95'
-		self.username = '{0}{0}'.format(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(randint(3,9))))
-		self.password = '{0}{0}'.format(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(randint(3,9))))
-		self.fingerprint = '{0}.{1}'.format(self.random(randint(13,18)), ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase +string.digits) for _ in range(randint(10, 27))))
-		self.superproperties = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(randint(100, 112)))
+		self.username = '{0}{0}'.format(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(randint(5,9))))
+		self.password = '{0}{0}'.format(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(randint(4,9))))
+		self.fingerprint = '{0}.{1}'.format(self.random(randint(13,18)), ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase +string.digits) for _ in range(randint(5, 35))))
+		self.superproperties = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(randint(80, 112)))
 		try:
 			vrorandom = sys.argv[3]
 			self.email = "{0}@{0}.com".format(''.join(choice(string.ascii_lowercase) for _ in range(randint(3,9))))
 		except:
-			self.email = "agbwvl+{0}-{0}.{0}@{0}.{0}.emlhub.com".format(self.username)
+			self.email = "{0}@discordismydadddddddddddddddddddddddddddddddy.tkm".format(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(randint(1,9))))
 		print(self.email)
 
 	def random(self, n):
