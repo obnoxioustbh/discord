@@ -81,6 +81,7 @@ class spammer:
 		for i in range(25):
 			for cID in self.channels:
 				self.messageSent = await self.sendMessage(session, cID)
+				print(self.messageSent)
 			await asyncio.sleep(choice([0.1, 0.2, 0.3]))
 
 	async def sendMessage(self, session, cID):
@@ -127,4 +128,4 @@ def nonMain(message, invite, channel, uid):
 
 if __name__ == "__main__":
 	loop = asyncio.new_event_loop()
-	loop.run_until_complete(main('https://discord.gg/pcWvTR', 'test', 'all', None))
+	loop.run_until_complete(main('https://discord.gg/XhyNRT', 'test', 'all', None))
