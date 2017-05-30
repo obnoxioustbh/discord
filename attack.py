@@ -38,7 +38,15 @@ class spammer:
 			try:
 				async with ClientSession(headers=headers, connector=connector) as session:
 					self.joinJSON = await self.joinServer(session)
+					try:
+						check = self.joinJSON['code']
+						print(self.joinJSON['message'])
+						return
+					except:
+						print('[+] Joined Server')
+						pass
 					self.guildID = self.joinJSON['guild']['id']
+					print(self.guildID)
  
 					if self.uid:
 						self.meID = await self.getMeID(session)
@@ -92,6 +100,7 @@ class spammer:
 			await self.joinServer(session)
 			for cID in self.channels:
 				self.messageSent = await self.sendMessage(session, cID)
+			
 				try:
 					if self.messageSent['code']:
 						print('[+] Flagged for verification, exiting.')
@@ -100,16 +109,38 @@ class spammer:
 					pass
 
 				try:
-
-
 					if not self.messageSent['nonce']:
 						self.sent += 1
 						print('[+] Messages Sent: {0}'.format(self.sent))
 				except:
 					pass
+
+				await self.changeNickname(session)
+
 				await self.humanSleep()
 			await self.humanSleep()
+		
 		#await self.leaveServer(session)
+
+	async def changeNickname(self, session):
+		async with session.patch(
+			'https://discordapp.com/api/v6/guilds/{0}/members/@me/nick'.format(self.guildID), 
+			data=json.dumps(
+				{'nick': self.generateUsername()}
+			)) as request:
+				resp = await request.json()
+				print(resp)
+
+	def generateName(self, count=2, fillers=2, name=''):
+		fillers = ['', '_', 'x', 'v', 'ii', '__', '-', 'vv', 'LL']
+		names = open('parsed.txt', 'r').readlines()
+		for i in range(count):
+			name += choice(fillers)
+			name += choice(names).strip().rstrip()
+
+		name += choice(fillers)
+
+		return name
 
 	async def sendMessage(self, session, cID):
 		async with session.post(
@@ -162,4 +193,4 @@ if __name__ == "__main__":
 		uid = sys.argv[2]
 	except:
 		uid = None
-	loop.run_until_complete(main(sys.argv[1], open('message.txt', 'r').read(), 'all', uid))
+	loop.run_until_complete(main('https://discord.gg/Ar2pZD', 'hello', 'all', uid))

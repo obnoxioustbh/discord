@@ -10,7 +10,7 @@ from random import choice
 from random import randint
 from GmailDotEmailGenerator import GmailDotEmailGenerator
 
-sys.argv = ['', 'accounts.txt', 15, 'random']
+sys.argv = ['', 'accounts.txt', 15]
 
 class bot:
 	def __init__(self, sem):
@@ -18,7 +18,7 @@ class bot:
 		self.proxy = 'http://gw.proxies.online:8081'
 		self.googleKey = '6Lef5iQTAAAAAKeIvIY-DeexoO3gj7ryl9rLMEnn'	
 		self.captchaKey = '5239dcfa969c0f7e3ecfaac6e1924e95'
-		self.username = '{0}{0}'.format(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(randint(5,9))))
+		self.username = self.generateName()
 		self.password = '{0}{0}'.format(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(randint(4,9))))
 		self.fingerprint = '{0}.{1}'.format(self.random(randint(13,18)), ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase +string.digits) for _ in range(randint(5, 35))))
 		self.superproperties = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(randint(80, 112)))
@@ -26,7 +26,7 @@ class bot:
 			vrorandom = sys.argv[3]
 			self.email = "{0}@gmail.com".format(''.join(choice(string.ascii_lowercase) for _ in range(randint(3,9))), ''.join(choice(string.ascii_lowercase) for _ in range(randint(3,9))))
 		except:
-			self.email = "{0}@discordismydadddddddddddddddddddddddddddddddy.tk".format(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(randint(1,9))))
+			self.email = "{0}@nwejghiwejh.gq".format(''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(randint(1,9))))
 		print(self.email)
 
 	def random(self, n):
@@ -34,9 +34,20 @@ class bot:
 		range_end = (10**n)-1
 		return randint(range_start, range_end)
 
+	def generateName(self, count=2, fillers=2, name=''):
+		fillers = ['', '_', 'x', 'v', 'ii', '_', '-', 'vv', 'LL']
+		names = open('parsed.txt', 'r').readlines()
+		for i in range(count):
+			name += choice(fillers)
+			name += choice(names).strip().rstrip()
+
+		name += choice(fillers)
+
+		return name
+
 	async def start(self):
 		try:
-			async with aiohttp.ClientSession(headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0'}, connector=aiohttp.TCPConnector(verify_ssl=False)) as session:
+			async with aiohttp.ClientSession(headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0', 'X-Fingerprint': self.fingerprint, 'X-Super-Properties': self.superproperties}, connector=aiohttp.TCPConnector(verify_ssl=False)) as session:
 				kek = await self.captcha(session)
 				index = await self.index(session)
 				await asyncio.sleep(5)
